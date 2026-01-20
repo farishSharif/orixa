@@ -1,0 +1,80 @@
+.about-page {
+    padding-top: calc(var(--header-height) + 4rem);
+    padding-bottom: 5rem;
+}
+
+.about-hero {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.about-hero .subtitle {
+    font-size: 1.1rem;
+    color: var(--color-gray);
+    letter-spacing: 0.1em;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-bottom: 8rem;
+}
+
+.about-text h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+}
+
+.about-text p {
+    color: var(--color-gray);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+
+.value-card {
+    background: var(--color-smoke);
+    padding: 3rem;
+    text-align: center;
+}
+
+.value-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.value-card p {
+    color: var(--color-gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}

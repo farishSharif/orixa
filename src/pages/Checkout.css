@@ -1,0 +1,140 @@
+/* Checkout Styles */
+.checkout-page {
+    padding-top: calc(var(--header-height) + 2rem);
+    padding-bottom: 5rem;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 5rem;
+}
+
+.checkout-form-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-gray);
+}
+
+.form-group input {
+    padding: 1rem;
+    border: 1px solid var(--color-smoke);
+    font-family: inherit;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.form-group input:focus {
+    border-color: var(--color-black);
+}
+
+.payment-options {
+    margin-bottom: 1.5rem;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-black);
+    cursor: pointer;
+}
+
+.stripe-placeholder {
+    background: var(--color-smoke);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.card-input-mock {
+    background: var(--color-white);
+    padding: 1rem;
+    border: 1px solid #ddd;
+    color: var(--color-gray);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+}
+
+.place-order-btn {
+    width: 100%;
+}
+
+/* Summary */
+.checkout-summary {
+    background: var(--color-smoke);
+    padding: 2.5rem;
+    position: sticky;
+    top: 100px;
+}
+
+.checkout-summary h3 {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+}
+
+.order-items-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.order-item-mini {
+    display: flex;
+    gap: 1rem;
+}
+
+.mini-details p {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.mini-price {
+    font-weight: 700;
+}
+
+.summary-spacer {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+}
+
+@media (max-width: 992px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

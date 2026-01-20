@@ -1,0 +1,133 @@
+/* Admin Styles */
+.admin-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: 100vh;
+    background: #fcfcfc;
+}
+
+.admin-sidebar {
+    background: var(--color-black);
+    color: var(--color-white);
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-logo {
+    padding: 0 2rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    margin-bottom: 3rem;
+}
+
+.admin-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: var(--transition-smooth);
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+}
+
+.admin-sidebar-footer {
+    padding: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-main {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.admin-topbar {
+    background: var(--color-white);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-smoke);
+}
+
+.admin-content {
+    padding: 3rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.stat-card {
+    background: var(--color-white);
+    padding: 2.5rem;
+    border: 1px solid var(--color-smoke);
+}
+
+.stat-card h3 {
+    font-size: 0.8rem;
+    color: var(--color-gray);
+    margin-bottom: 1rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    color: #2c7a7b;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-white);
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 1.2rem 2rem;
+    border-bottom: 2px solid var(--color-smoke);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--color-gray);
+}
+
+.admin-table td {
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--color-smoke);
+    font-size: 0.9rem;
+}
+
+.edit-link {
+    color: var(--color-gold);
+    font-weight: 600;
+    text-decoration: underline;
+}
