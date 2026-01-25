@@ -1,24 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, ChevronDown } from 'lucide-react';
+import { dataService } from '../lib/dataService';
+import type { Product } from '../types/database';
 import './Shop.css';
 
 const Shop: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState('All');
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Sample data
-    const products = [
-        { id: 1, name: 'Cotton Crew Neck', price: 1299.00, category: 'Apparel' },
-        { id: 2, name: 'Slim Fit Chinos', price: 2499.00, category: 'Apparel' },
-        { id: 3, name: 'Linen Summer Shirt', price: 1899.00, category: 'Apparel' },
-        { id: 4, name: 'Leather School Bag', price: 3499.00, category: 'Accessories' },
-        { id: 5, name: 'Knit Wool Sweater', price: 2999.00, category: 'Apparel' },
-        { id: 6, name: 'Daily Essential Tee', price: 899.00, category: 'Apparel' },
-        { id: 7, name: 'Formal Dinner Blazer', price: 6999.00, category: 'Apparel' },
-        { id: 8, name: 'Classic Leather Belt', price: 999.00, category: 'Accessories' },
-    ];
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await dataService.getProducts();
+                setProducts(data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const categories = ['All', 'Apparel', 'Accessories', 'New Arrivals'];
+
+    const filteredProducts = activeFilter === 'All'
+        ? products
+        : products.filter(p => p.category === activeFilter);
+
+    if (loading) return <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>Loading collection...</div>;
 
     return (
         <div className="shop-page container">
@@ -53,22 +66,18 @@ const Shop: React.FC = () => {
                             ))}
                         </ul>
                     </div>
-                    <div className="sidebar-section">
-                        <h3>Price</h3>
-                        <ul>
-                            <li><button className="filter-link">Under ₹1500</button></li>
-                            <li><button className="filter-link">₹1500 - ₹5000</button></li>
-                            <li><button className="filter-link">₹5000+</button></li>
-                        </ul>
-                    </div>
                 </aside>
 
                 <section className="product-list">
                     <div className="shop-products-grid">
-                        {products.map(product => (
+                        {filteredProducts.map(product => (
                             <div key={product.id} className="product-card">
                                 <div className="product-img-wrapper">
-                                    <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
+                                    {product.images?.[0] ? (
+                                        <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
+                                    )}
                                     <Link to={`/product/${product.id}`} className="add-to-cart-quick">View Details</Link>
                                 </div>
                                 <div className="product-meta">
@@ -78,6 +87,11 @@ const Shop: React.FC = () => {
                             </div>
                         ))}
                     </div>
+                    {filteredProducts.length === 0 && (
+                        <div style={{ textAlign: 'center', padding: '40px' }}>
+                            <p>No products found in this category.</p>
+                        </div>
+                    )}
                 </section>
             </div>
         </div>

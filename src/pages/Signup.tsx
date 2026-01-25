@@ -22,11 +22,18 @@ const Signup: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
             setError(error.message);
-        } else {
+        } else if (data.user) {
+            // Create profile
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert([{ id: data.user.id, full_name: email.split('@')[0] }]);
+
+            if (profileError) console.error('Profile creation error:', profileError);
+
             alert("Verification email sent! Please check your inbox.");
             navigate('/login');
         }

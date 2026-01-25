@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { dataService } from '../lib/dataService';
+import type { Product } from '../types/database';
 import './Home.css';
 
 const Home: React.FC = () => {
+    const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const fetchNewArrivals = async () => {
+            try {
+                const data = await dataService.getProducts();
+                setNewArrivals(data.slice(0, 4));
+            } catch (error) {
+                console.error('Error fetching new arrivals:', error);
+            }
+        };
+        fetchNewArrivals();
+    }, []);
+
     return (
         <div className="home-page">
             {/* Hero Section */}
@@ -68,17 +84,19 @@ const Home: React.FC = () => {
                         <Link to="/shop?sort=newest" className="view-all">Shop Newest <ArrowRight size={18} /></Link>
                     </div>
                     <div className="products-grid">
-                        {/* These will be dynamic later */}
-                        {[1, 2, 4, 3].map((i) => (
-                            <div key={i} className="product-card">
+                        {newArrivals.map((product) => (
+                            <div key={product.id} className="product-card">
                                 <div className="product-img-wrapper">
-                                    <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
-                                    <button className="add-to-cart-quick">Add to Cart</button>
+                                    {product.images?.[0] ? (
+                                        <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    ) : (
+                                        <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
+                                    )}
+                                    <Link to={`/product/${product.id}`} className="add-to-cart-quick">View Details</Link>
                                 </div>
                                 <div className="product-meta">
-                                    <h3>ORIXA Signature Blazer</h3>
-                                    <p className="price">₹4,999.00</p>
-                                    <Link to={`/product/${i}`} className="view-details-btn">View Details</Link>
+                                    <h3>{product.name}</h3>
+                                    <p className="price">₹{product.price.toLocaleString('en-IN')}</p>
                                 </div>
                             </div>
                         ))}

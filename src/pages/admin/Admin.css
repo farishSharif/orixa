@@ -130,4 +130,99 @@
     color: var(--color-gold);
     font-weight: 600;
     text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Modal and Form Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--color-white);
+    padding: 3rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-gray);
+    transition: var(--transition-smooth);
+}
+
+.close-btn:hover {
+    color: var(--color-black);
+}
+
+.admin-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.admin-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.admin-form label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--color-gray);
+    margin-bottom: 0.5rem;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--color-smoke);
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.admin-form textarea {
+    resize: vertical;
+}
+
+.admin-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
 }

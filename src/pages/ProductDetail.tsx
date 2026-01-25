@@ -1,47 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, Star } from 'lucide-react';
+import { dataService } from '../lib/dataService';
+import { useCart } from '../context/CartContext';
+import type { Product } from '../types/database';
 import './ProductDetail.css';
 
 const ProductDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const { addToCart } = useCart();
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
     const [selectedSize, setSelectedSize] = useState('');
     const [activeImage, setActiveImage] = useState(0);
 
-    const allProducts = [
-        {
-            id: 1,
-            name: 'ORIXA Signature Blazer',
-            price: 4999.00,
-            category: 'Apparel',
-            description: 'A premium tailored blazer for boys, crafted from high-quality wool blend for a sophisticated look. Perfect for formal occasions and celebrations.',
-            details: ['Wool Blend Fabric', 'Tailored Fit', 'Satin Lining', 'Dry clean only'],
-            sizes: ['6Y', '8Y', '10Y', '12Y', '14Y'],
-            images: ['/assets/images/placeholder.png', '/assets/images/placeholder.png', '/assets/images/placeholder.png']
-        },
-        {
-            id: 2,
-            name: 'Slim Fit Chinos',
-            price: 2499.00,
-            category: 'Apparel',
-            description: 'Classic slim-fit chinos designed for both style and comfort. These trousers feature a soft cotton twill with a hint of stretch.',
-            details: ['98% Cotton, 2% Elastane', 'Slim fit', 'Adjustable waistband', 'Machine washable'],
-            sizes: ['6Y', '8Y', '10Y', '12Y', '14Y'],
-            images: ['/assets/images/placeholder.png', '/assets/images/placeholder.png', '/assets/images/placeholder.png']
-        },
-        {
-            id: 3,
-            name: 'Linen Summer Shirt',
-            price: 1899.00,
-            category: 'Apparel',
-            description: 'A breathable linen shirt perfect for warm weather. Minimalist design with a clean button-down front.',
-            details: ['100% Organic Linen', 'Breathable fabric', 'Natural buttons', 'Easy through the body'],
-            sizes: ['6Y', '8Y', '10Y', '12Y', '14Y'],
-            images: ['/assets/images/placeholder.png', '/assets/images/placeholder.png', '/assets/images/placeholder.png']
-        }
-    ];
+    useEffect(() => {
+        const fetchProduct = async () => {
+            if (!id) return;
+            try {
+                const data = await dataService.getProductById(id);
+                setProduct(data);
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProduct();
+    }, [id]);
 
-    const product = allProducts.find(p => p.id === Number(id)) || allProducts[0];
+    if (loading) return <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>Loading product details...</div>;
+    if (!product) return <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>Product not found.</div>;
 
     return (
         <div className="product-detail-page container">
@@ -55,19 +44,25 @@ const ProductDetail: React.FC = () => {
                 {/* Gallery */}
                 <div className="product-gallery">
                     <div className="main-image">
-                        <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
+                        {product.images?.[activeImage] ? (
+                            <img src={product.images[activeImage]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '3/4' }}></div>
+                        )}
                     </div>
-                    <div className="thumbnail-list">
-                        {product.images.map((_img, idx) => (
-                            <div
-                                key={idx}
-                                className={`thumbnail ${activeImage === idx ? 'active' : ''}`}
-                                onClick={() => setActiveImage(idx)}
-                            >
-                                <div className="placeholder-img" style={{ background: '#f5f5f5', aspectRatio: '1/1' }}></div>
-                            </div>
-                        ))}
-                    </div>
+                    {product.images && product.images.length > 1 && (
+                        <div className="thumbnail-list">
+                            {product.images.map((img, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`thumbnail ${activeImage === idx ? 'active' : ''}`}
+                                    onClick={() => setActiveImage(idx)}
+                                >
+                                    <img src={img} alt={`${product.name} ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Info */}
@@ -94,7 +89,7 @@ const ProductDetail: React.FC = () => {
                                 <button className="size-guide">Size Guide</button>
                             </div>
                             <div className="size-buttons">
-                                {product.sizes.map(size => (
+                                {product.sizes && product.sizes.map(size => (
                                     <button
                                         key={size}
                                         className={`size-btn ${selectedSize === size ? 'active' : ''}`}
@@ -108,7 +103,16 @@ const ProductDetail: React.FC = () => {
                     </div>
 
                     <div className="product-actions">
-                        <button className="btn btn-dark add-to-cart">
+                        <button
+                            className="btn btn-dark add-to-cart"
+                            onClick={() => {
+                                if (!selectedSize) {
+                                    alert('Please select a size');
+                                    return;
+                                }
+                                addToCart(product, selectedSize);
+                            }}
+                        >
                             <ShoppingBag size={20} /> Add to Cart
                         </button>
                         <button className="btn btn-outline-dark wishlist-btn">
@@ -120,7 +124,7 @@ const ProductDetail: React.FC = () => {
                         <details open>
                             <summary>Details & Composition</summary>
                             <ul>
-                                {product.details.map((detail, i) => <li key={i}>{detail}</li>)}
+                                {product.details && product.details.map((detail, i) => <li key={i}>{detail}</li>)}
                             </ul>
                         </details>
                         <details>

@@ -3,7 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, User, Menu, X, Search } from 'lucide-react';
 import './Header.css';
 
+import { useCart } from '../context/CartContext';
+
 const Header: React.FC = () => {
+    const { cartCount } = useCart();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const location = useLocation();
@@ -47,7 +50,7 @@ const Header: React.FC = () => {
                     </Link>
                     <Link to="/cart" className="icon-btn cart-btn">
                         <ShoppingBag size={22} />
-                        <span className="cart-count">0</span>
+                        {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
                     </Link>
                 </div>
             </div>
