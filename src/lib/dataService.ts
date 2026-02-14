@@ -71,7 +71,6 @@ export const dataService = {
         return data as Order[];
     },
 
-    // --- Profiles ---
     async getProfile(id: string) {
         const { data, error } = await supabase
             .from('profiles')
@@ -80,5 +79,13 @@ export const dataService = {
             .single();
         if (error) throw error;
         return data as Profile;
+    },
+
+    // --- Subscription ---
+    subscribeToProducts(callback: () => void) {
+        return supabase
+            .channel('public:products')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, callback)
+            .subscribe();
     }
 };

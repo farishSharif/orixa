@@ -18,6 +18,14 @@ const Home: React.FC = () => {
             }
         };
         fetchNewArrivals();
+
+        const subscription = dataService.subscribeToProducts(() => {
+            fetchNewArrivals();
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
     return (

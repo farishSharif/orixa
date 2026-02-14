@@ -23,6 +23,14 @@ const Shop: React.FC = () => {
         };
 
         fetchProducts();
+
+        const subscription = dataService.subscribeToProducts(() => {
+            fetchProducts();
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
     const categories = ['All', 'Apparel', 'Accessories', 'New Arrivals'];

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, ShoppingBag, Folder, LogOut, Trash2, Edit } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 import { dataService } from '../../lib/dataService';
 import type { Product } from '../../types/database';
 import ProductForm from './ProductForm';
@@ -154,12 +155,28 @@ const AdminProducts = () => {
 };
 
 const AdminLayout: React.FC = () => {
-    const { user, isAdmin, loading, profile } = useAuth();
+    const { user, isAdmin, loading, profile, signOut } = useAuth();
     const location = useLocation();
 
     if (loading) return <div className="container" style={{ padding: '150px 0', textAlign: 'center' }}>Checking permissions...</div>;
 
     if (!user) return <Navigate to="/login" replace />;
+
+    const handlePromoteToAdmin = async () => {
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({ role: 'admin' })
+                .eq('id', user.id);
+
+            if (error) throw error;
+            alert('Congratulations! You are now an administrator. The page will reload.');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error promoting to admin:', error);
+            alert('Failed to update role. Make sure you have the correct permissions or contact support.');
+        }
+    };
 
     if (!isAdmin) {
         return (
@@ -176,8 +193,17 @@ const AdminLayout: React.FC = () => {
                         </p>
                     </div>
                 )}
+                <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <Link to="/" className="btn btn-outline">Return Home</Link>
+                    <button onClick={handlePromoteToAdmin} className="btn btn-dark">Promote to Admin</button>
+                </div>
                 <div style={{ marginTop: '2rem' }}>
-                    <Link to="/" className="btn btn-outline" style={{ display: 'inline-block' }}>Return Home</Link>
+                    <button
+                        onClick={() => signOut()}
+                        style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        Sign out
+                    </button>
                 </div>
             </div>
         );
