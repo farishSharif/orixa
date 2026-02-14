@@ -77,7 +77,7 @@ const Login: React.FC = () => {
 
                 <div className="social-auth">
                     <button className="btn btn-outline-dark w-full">
-                        <Github size={18} /> GitHub
+                        <Mail size={18} /> Gmail
                     </button>
                 </div>
 
